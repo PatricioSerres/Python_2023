@@ -58,7 +58,7 @@ def main():
                 login.hide()
                 registro.registrarse()
                 login.un_hide()
-                                
+    login.close()        
     return perfil_actual
                            
 #llamar a la siguiente funcion con la variable perfil_actual

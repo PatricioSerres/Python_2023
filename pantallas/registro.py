@@ -38,7 +38,7 @@ def _register ():
     visible = True
     errores = False
     dicc = {}
-    direc = None
+    direc = '././imagenes/perfil.png'
     while True:
         event,value = window.read()
         if event == 'check':

@@ -67,6 +67,7 @@ def main (dicc):
                     findir = direc.split('/')
                     if ('.png' in findir[-1]):
                         window['avatar'].update(source=direc,subsample=2)
+                        dicc['foto'] = direc
                         #print (findir)
                     else: 
                         sg.popup('Por favor, elija una imagen .png')

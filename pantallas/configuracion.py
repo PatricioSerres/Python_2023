@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import os
 import csv
+from datetime import datetime
 
 def crear_ventana_configuracion(config):
 
@@ -13,7 +14,7 @@ def crear_ventana_configuracion(config):
     ]
     return sg.Window("Configuración", layout, finalize=True, margins=(100,100))
 
-def main(config = None):
+def main(perfil, config = None):
     crear_ventana_configuracion(config)
     config_aux = config[0].copy()
     
@@ -33,9 +34,23 @@ def main(config = None):
                 config_aux[2] = values["-CONFIGURACION-MEMES-"]
             case "-CONFIGURACION-GUARDAR-":
                 config[0] = config_aux.copy()
+                timestamp = datetime.timestamp(datetime.now())
+                fecha_hora = datetime.fromtimestamp(timestamp)
                 with open(os.path.join('archivos','archivo_configuracion.csv'), 'w') as archivo_csv:
                     writer = csv.writer(archivo_csv)
                     writer.writerow([config[0][0], config[0][1], config[0][2]])
+                try:
+                    with open(os.path.join('archivos','logs.csv'), 'a') as log:
+                        writer = csv.writer(log)
+                        fecha_mod=fecha_hora.strftime("%m/%d/%Y, %H:%M:%S")
+                        perfil_mod= perfil['nick']
+                        operacion_mod= 'Cambio en configuracion'
+                        writer.writerow([fecha_mod, perfil_mod,operacion_mod])
+                except FileNotFoundError:
+                    with open(os.path.join('archivos','logs.csv'), 'w') as log:
+                        linea_vacia = ["","",""]
+                        writer = csv.writer(log)
+                        writer.writerow(linea_vacia)
             case sg.WIN_CLOSED:
                 current_window.close()
                 return None

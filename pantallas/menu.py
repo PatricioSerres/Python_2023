@@ -8,10 +8,10 @@ import pantallas.ayuda as ayuda
 import pantallas.etiquetar as etiquetar
 import csv
 
-def crear_ventana_principal():
+def crear_ventana_principal(perfil):
 
     image_configuracion = '././imagenes/boton.png'
-    image_perfil = '././imagenes/perfil.png'
+    image_perfil = perfil['foto']
 
     menu_def = [
              ['&Ayuda', 'Acerca de...'],
@@ -25,9 +25,9 @@ def crear_ventana_principal():
         [sg.Button("Salir",font=('Helvetica', 15), key="-PRINCIPAL-SALIR-", size=(15,0))],
     ]
     
-    images_col = [sg.Button('', image_filename=image_configuracion, image_size=(44, 44), image_subsample=2, key="-PRINCIPAL-CONFIGURACION-")],
+    images_col = [sg.Button('', image_filename=image_configuracion, image_size=(50, 50), image_subsample=2, key="-PRINCIPAL-CONFIGURACION-")],
 
-    perfil_col= [sg.Button('', image_filename=image_perfil, image_size=(44, 44), key="-PRINCIPAL-EDITAR-")],
+    perfil_col= [sg.Button('', image_filename=image_perfil, image_size=(50, 50), image_subsample=5, key="-PRINCIPAL-EDITAR-")],
     
 
     return [[sg.Column(perfil_col, element_justification='l', vertical_alignment='t'),sg.Push(), sg.Column(images_col, element_justification='c', vertical_alignment="c")], [sg.Column(left_col, justification="center", element_justification='c', vertical_alignment="r", pad=((0,250)))]]
@@ -35,7 +35,7 @@ def crear_ventana_principal():
    
 
 def main(perfil):
-    menu = sg.Window("Menu principal", crear_ventana_principal(), finalize=True, resizable=True, metadata={"configuracion_csv": None})
+    menu = sg.Window("Menu principal", crear_ventana_principal(perfil), finalize=True, resizable=True, metadata={"configuracion_csv": None})
     menu.set_min_size((1024,768))
 
     # abro archivo
@@ -56,6 +56,9 @@ def main(perfil):
         print(f'La excepción {e} no se pudo resolver')
         sg.Popup('Ocurrió un error inesperado.')
 
+
+    
+
     menu.metadata["configuracion_csv"] = contenido_csv
 
 
@@ -63,7 +66,6 @@ def main(perfil):
 
     while True:
         current_window, event, values = sg.read_all_windows()
-        # PARA TESTEAR print(f"Ventana actual: {current_window}, Evento: {event}, valores: {values}")    
         
         if event == sg.WIN_CLOSED:
             current_window.close()
@@ -75,7 +77,7 @@ def main(perfil):
             ayuda.main()
         elif event == "-PRINCIPAL-ETIQUETAR-":
             current_window.hide()
-            etiquetar.main(config=menu.metadata["configuracion_csv"])
+            etiquetar.main(perfil, config=menu.metadata["configuracion_csv"])
             current_window.un_hide()
         elif event == "-PRINCIPAL-MEME-":
             current_window.hide()
@@ -87,7 +89,7 @@ def main(perfil):
             current_window.un_hide()
         elif event == "-PRINCIPAL-CONFIGURACION-":        
             current_window.hide() 
-            conf = configuracion.main(config=menu.metadata["configuracion_csv"]) 
+            conf = configuracion.main(perfil, config=menu.metadata["configuracion_csv"])
             if conf is not None:
                 menu.metadata["configuracion_csv"] = conf
             current_window.un_hide()  
