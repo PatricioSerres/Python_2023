@@ -8,11 +8,17 @@ import pantallas.ayuda as ayuda
 import pantallas.etiquetar as etiquetar
 import csv
 
+# PEP 8 VER. Idem ayuda, configuración, etiquetar, unlpimage, memes, registro, inicio, modificar y collage.
+# SALIR O CERRAR SESIÓN? VER
+# Popup en configuración?
+
+# ------- Definicion del layout --------
+
 def crear_ventana_principal(perfil):
     """ Esta función crea el layout de la ventana del menu principal, recibiendo como parametro el perfil elegido
         al iniciar sesión o registrarse. Del mismo se mostrará la imagen seleccionada y su nick."""
     
-    image_configuracion = '././imagenes/boton.png'  # CONSULTAR 
+    image_configuracion = '././imagenes/boton.png'   # Agregar como una constante en otro archivo ------------------------------------------------------
     image_perfil = perfil['foto']
 
     menu_def = [
@@ -34,14 +40,19 @@ def crear_ventana_principal(perfil):
 
     return [[sg.Column(perfil_col, element_justification='l', vertical_alignment='c'),sg.Push(), sg.Column(images_col, element_justification='c', vertical_alignment="t")], [sg.Column(left_col, justification="center", element_justification='c', vertical_alignment="r", pad=((0,250)))]]
 
-   
+
+
+
+
+
+# ------- Main -------- 
 
 def main(perfil):
     """ En esta función se ejecuta el menu principal de la aplicación, que durante un loop infinito va leyendo los
         eventos provocados al interactuar con el mismo."""
     
     menu = sg.Window("Menu principal", crear_ventana_principal(perfil), finalize=True, resizable=True, metadata={"configuracion_csv": None})
-    menu.set_min_size((1024,768))
+    menu.set_min_size((1024,768))    # PONER COMO UNA CONSTANTE ------------------------------------------------------------------------------------------------
     # se le asigna a la variable menu el layout, y se le establece el tamaño mínimo.
 
     # se abre el archivo de configuración en modo lectura, sino existe, se crea vacío y se vuelve a leer.
@@ -63,8 +74,6 @@ def main(perfil):
         sg.Popup('Ocurrió un error inesperado.')
 
 
-    
-
     menu.metadata["configuracion_csv"] = contenido_csv
     # se le asigna a la metadata del menu la configuración contenida en el archivo csv. 
 
@@ -73,10 +82,7 @@ def main(perfil):
     while True:
         current_window, event, values = sg.read_all_windows()
         
-        if event == sg.WIN_CLOSED:
-            current_window.close()
-            break
-        elif event == "-PRINCIPAL-SALIR-":
+        if (event == "-PRINCIPAL-SALIR-") or event == sg.WIN_CLOSED:
             current_window.close()
             break
         elif event == "Acerca de...":
@@ -88,11 +94,11 @@ def main(perfil):
             current_window.un_hide()
         elif event == "-PRINCIPAL-MEME-":
             current_window.hide()
-            memes.main("Generar Meme")
+            memes.main()
             current_window.un_hide()
         elif event == "-PRINCIPAL-COLLAGE-":
             current_window.hide()
-            collage.main("Generar Collage")
+            collage.main()
             current_window.un_hide()
         elif event == "-PRINCIPAL-CONFIGURACION-":   
             current_window.hide() 

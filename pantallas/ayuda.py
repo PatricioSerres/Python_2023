@@ -21,7 +21,7 @@ def main():
     """ Esta función ejecuta la ventana de ayuda, que entrará en loop hasta que se cierre """
     crear_ventana_ayuda()
     while True:
-         current_window, event, values = sg.read_all_windows()            
+         current_window, event,values = sg.read_all_windows()            
          if event == sg.WIN_CLOSED:
             current_window.close()
             break

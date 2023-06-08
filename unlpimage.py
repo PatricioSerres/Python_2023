@@ -1,5 +1,5 @@
-import pantallas.INICIO
+import pantallas.inicio
 import pantallas.menu
 
-perfil = pantallas.INICIO.main()
-pantallas.menu.main(perfil)
+perfil = pantallas.inicio.main()
+fin = pantallas.menu.main(perfil)

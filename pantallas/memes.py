@@ -1,13 +1,17 @@
 import PySimpleGUI as sg
 
-def crear_ventana_meme(nombre):
+def crear_ventana_meme():    
+    """Esta función define el layout de la ventana de memes"""
     layout = [
         [sg.Button("Volver", key="-SECUNDARIA-VOLVER-")],
     ]
-    return sg.Window(nombre, layout, finalize=True, margins=(100,100))
+    return sg.Window("Generador de memes", layout, finalize=True, margins=(100,100))
 
-def main(nombre):
-    crear_ventana_meme(nombre)
+# vaya momazos papu :v
+
+def main():
+    """Esta función ejecuta la ventana de memes"""
+    crear_ventana_meme()
 
     while True:
         current_window, event, values = sg.read_all_windows()            
