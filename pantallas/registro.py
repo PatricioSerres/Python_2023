@@ -95,7 +95,6 @@ def _register ():
 
 dir_json = os.path.join('archivos',"user.json")
 registracionExitosa = False
-jsonData = open(dir_json,'r+')
 
 def cargarJson(user):                                  
     aux = []                                            #crea una lista donde va a guardar los elementos
