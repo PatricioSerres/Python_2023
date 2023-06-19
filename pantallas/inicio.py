@@ -9,16 +9,23 @@ def main():
     nums = ('0','1','2','3')                                               #variable que contiene los posibles valores que retorne la funcion login, uno para cada pestaña
     dir = os.path.dirname(os.path.realpath("imagenes"))
     dir_json = os.path.join('archivos',"user.json")
-    jsonData = open(dir_json,'r+')
+    try:
+        jsonData = open(dir_json,'r+')
+    except FileNotFoundError:                                               #si no esta creado lo inicializa
+        with open(dir_json,'w') as jsonData:                      
+            json.dump([],jsonData)
+        jsonData = open(dir_json,'r+')
+
     lista = []
-    for i in range(0,20,1):                                         #inicia la lista de perfiles a cargar. En la funcion "recorrerJson" se reemplazaran las imagenes por default por las  
+    for i in range(0,20,1):                                          #inicia la lista de perfiles a cargar. En la funcion "recorrerJson" se reemplazaran las imagenes por default por las  
         lista.append(os.path.join(dir, 'imagenes', 'perfil.png'))    #correspondientes a los perfiles. El limite es de 20 perfiles (5 pestañas)
     def recorrerJson():
-        datos = json.load(jsonData)                                 
-        i=0                 
-        for line in datos:
-            lista[i] = line["foto"]
-            i += 1
+        datos = json.load(jsonData)
+        i=0
+        if (datos != []):
+            for line in datos:
+                lista[i] = line["foto"]
+                i += 1
         jsonData.close()
 
     recorrerJson()
@@ -31,9 +38,10 @@ def main():
             act = act+4
         if state == UI.WIN_CLOSED:
             login.close()
-        login.hide()
+        else:
+            login.hide()
         return act,state,login  
-    
+    perfil_actual= []
     act = 0
     state = 0
     while True:
@@ -58,7 +66,7 @@ def main():
                 login.hide()
                 registro.registrarse()
                 login.un_hide()
-    login.close()        
+    login.close()
     return perfil_actual
                            
 #llamar a la siguiente funcion con la variable perfil_actual
