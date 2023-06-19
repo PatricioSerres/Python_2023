@@ -48,9 +48,9 @@ def agregarLog(perfil,lista,titulo):
     logs = []
     timestamp = datetime.timestamp(datetime.now())
     lista_aux = lista.copy()
-    lista_aux = ""
+    lista_aux = [] #cambio aca estaba en ""
     for imagen in lista:
-        lista_aux = lista_aux + imagen + ";" 
-    lista_aux = lista_aux.removesuffix(";")
+        lista_aux.append(imagen)#lista_aux = lista_aux + imagen + ";" 
+    #lista_aux = lista_aux.removesuffix(";")
     logs= [timestamp,perfil,'nuevo collage',lista_aux,titulo]
     escribir_al_final_csv(path.DIR_LOGS, logs)
