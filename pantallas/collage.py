@@ -1,13 +1,15 @@
 import PySimpleGUI as sg
 
-def crear_ventana_collage(nombre):
+def crear_ventana_collage():
+    """Esta función define el layout de la ventana de collages """
     layout = [
         [sg.Button("Volver", key="-SECUNDARIA-VOLVER-")],
     ]
-    return sg.Window(nombre, layout, finalize=True, margins=(100,100))
+    return sg.Window("Generador de Collages", layout, finalize=True, margins=(100,100))
 
-def main(nombre):
-    crear_ventana_collage(nombre)
+def main():
+    """Esta función ejecuta la ventana de collages"""
+    crear_ventana_collage()
 
     while True:
         current_window, event, values = sg.read_all_windows()            

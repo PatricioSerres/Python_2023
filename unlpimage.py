@@ -1,4 +1,4 @@
-import pantallas.INICIO
+import pantallas.inicio
 import pantallas.menu
 
 perfil = pantallas.INICIO.main()

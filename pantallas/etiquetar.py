@@ -5,8 +5,12 @@ import io
 import csv
 from datetime import datetime
 
+#Consultar Popup --------------------------------------------------------------------
+# Arreglar lista como texto
+
 def crear_ventana_etiquetar(fnames):
-    # Se define el layout, se muestra y se lee el formulario.
+    """Se define el layout de la ventana etiquetar"""
+    
     col = [[sg.Text('Ruta: '), sg.Text('', key= '-RUTA-')],
           [sg.Text('Tipo:'), sg.Text('', key= '-TIPO-')], 
           [sg.Text('Resolución:'), sg.Text('', key= '-RESOLUCION-')],
@@ -28,9 +32,8 @@ def crear_ventana_etiquetar(fnames):
 
 # Usa el PIL para leer la info de una imagen
  
-def get_img_data(f, maxsize=(450,350)):
-        """Generate image data using PIL
-        """
+def get_img_data(f):
+        """Devuelve los datos de la imagen"""
         img = Image.open(f)
         img_format = img.format
         img_size = img.size
@@ -41,6 +44,7 @@ def get_img_data(f, maxsize=(450,350)):
 # Abre solo una imagen, le ajusta el tamaño y la retorna
 
 def get_image(f, maxsize=(450,350)):
+     """Genera una imagen usando Pil"""
      img = Image.open(f)
      img.thumbnail(maxsize)
      bio = io.BytesIO()
@@ -51,7 +55,7 @@ def get_image(f, maxsize=(450,350)):
 
 
 def main(perfil, config):
-    #Obtiene la carpeta que contiene las imágenes del usuario
+    # Obtiene la carpeta que contiene las imágenes del usuario
     folder = os.path.join(config[0][0])
     
     # Tipos de imagenes soportados por PIL
@@ -65,19 +69,21 @@ def main(perfil, config):
         # Crea sub lista de archivos de imagenes
         fnames = [f for f in flist0 if os.path.isfile(
         os.path.join(folder, f)) and f.lower().endswith(img_types)]
-
-        num_files = len(fnames)                # Numero de imagenes encontradas
+        # Numero de imagenes encontradas
+        num_files = len(fnames)                
         if num_files == 0:
             sg.popup('No hay archivos en la carpeta')
         else:
-            del flist0                             # No se utiliza mas
+            # No se utiliza mas flist0
+            del flist0                             
             try:
-                #Se abre el archivo
+                # Se abre el archivo
                 with open(os.path.join('archivos','archivo_etiquetar.csv'), 'r') as archivo_csv:
                     lector_csv = csv.reader(archivo_csv)
                     contenido_csv = list(lector_csv)
             except FileNotFoundError:
-                with open(os.path.join('archivos','archivo_etiquetar.csv'), 'w') as archivo_csv: #Si no esta creado el archivo csv, se crea con un encabezado
+                # Si no esta creado el archivo csv, se crea con un encabezado
+                with open(os.path.join('archivos','archivo_etiquetar.csv'), 'w') as archivo_csv: 
                     encabezado = ['Ruta',"Descripcion","Resolucion","Tamaño","Tipo",'Tags',"Ultimo Usuario","Hora"]
                     writer = csv.writer(archivo_csv,lineterminator='\n')
                     writer.writerow(encabezado)
@@ -89,27 +95,30 @@ def main(perfil, config):
                 print(f'La excepción {e} no se pudo resolver')
                 sg.Popup('Ocurrió un error inesperado.')
 
-            
-            filename = os.path.join(folder, fnames[0])  # Nombre del primer archivo en la lista   
-            crear_ventana_etiquetar(fnames) #Se invoca a la creacion de la ventana
+            # Nombre del primer archivo en la lista  
+            filename = os.path.join(folder, fnames[0])   
+            crear_ventana_etiquetar(fnames)
             fotos = contenido_csv
             logs = []
             # Loop que lee la entrada del usuario y muestra la imagen, el nombre del archivo
-            
+
             while True:
-                # Lee el formulario
+
                 current_window, event, values = sg.read_all_windows()
                 # Respuesta a distintos eventos
                 if event == sg.WIN_CLOSED:
                     current_window.close()
                     break
-                elif event == 'listbox':            # Algo de la listbox
-                    f = values["listbox"][0]            # Nombre del archivo seleccionado
-                    filename = os.path.join(folder, f)  # Lee este archivo
+                # Al clickear algún elemento de la listbox
+                elif event == 'listbox': 
+                    # Nombre del archivo seleccionado           
+                    f = values["listbox"][0]   
+                    # Lee este archivo         
+                    filename = os.path.join(folder, f)  
                     foto_actual= None
                     for foto in fotos:
                         if(foto[0] == filename):
-                            foto_actual=foto
+                            foto_actual = foto
                             try:
                                 aux = foto[5]
                                 aux = aux.replace("[", "")
@@ -119,8 +128,10 @@ def main(perfil, config):
                                 foto_actual[5] = list(aux)
                             except AttributeError:
                                 print('Error de atributo')
-                    if (foto_actual== None):
-                        foto_actual=get_img_data(filename)
+                    # Si la imagen no fue etiquetada previamente, se recibe su información de la función get_img_data
+                    if (foto_actual == None):
+                        foto_actual = get_img_data(filename)
+                    # Se muestra la imagen en pantalla, junto con sus datos
                     imagen = get_image(filename)
                     current_window['-IMAGEN-'].update(data=imagen)
                     current_window['-RUTA-'].update(foto_actual[0])
@@ -192,18 +203,9 @@ def main(perfil, config):
                 elif event == '-GUARDAR-':
                     timestamp = datetime.timestamp(datetime.now())
                     fecha_hora = datetime.fromtimestamp(timestamp)
-                    with open(os.path.join('archivos','archivo_configuracion.csv'), 'w') as archivo_csv:
-                        writer = csv.writer(archivo_csv)
-                        writer.writerow([config[0][0], config[0][1], config[0][2]])
-                    try:
-                        with open(os.path.join('archivos','logs.csv'), 'a') as log:
-                            writer = csv.writer(log)
-                            writer.writerows(logs)
-                    except FileNotFoundError:
-                        with open(os.path.join('archivos','logs.csv'), 'w') as log:
-                            linea_vacia = ["","",""]
-                            writer = csv.writer(log)
-                            writer.writerow(linea_vacia)
+                    with open(os.path.join('archivos','logs.csv'), 'a') as log:
+                        writer = csv.writer(log)
+                        writer.writerows(logs)
                     # Guarda los cambios en el archivo CSV
                     with open(os.path.join('archivos','archivo_etiquetar.csv'), 'w') as archivo_csv:
                         writer = csv.writer(archivo_csv,lineterminator='\n')

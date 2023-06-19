@@ -8,34 +8,34 @@ def _register ():
 
     columna1 = [
         #Texto de registrarse
-        [sg.Text('Registrarse',background_color=("white"),text_color=('Black'))],
+        [sg.Text('Registrarse')],
         #Input de nick
-        [sg.Text('nick',background_color=("white"),text_color=('Black'))],[sg.Input(size=(20,5),font=('calibri',10),key="nick")],
+        [sg.Text('nick')],[sg.Input(size=(20,5),font=('calibri',10),key="nick")],
         #Input de nombre      
-        [sg.Text('Nombre',background_color=("white"),text_color=('Black'))],[sg.Input(size=(20,5),font=('calibri',10),key='nombre')],
+        [sg.Text('Nombre',)],[sg.Input(size=(20,5),font=('calibri',10),key='nombre')],
         #Input de edad
-        [sg.Text('Edad',background_color=("white"),text_color=('Black'))],[sg.Input(size=(8,5),key='edad')],
+        [sg.Text('Edad',)],[sg.Input(size=(8,5),key='edad')],
         #Genero
         [sg.Text('Género autopercibido',background_color=("white"),text_color=('Black'))],
         [sg.Combo(values=('Hombre','Mujer','-'),readonly=True,key=('lista'),disabled=False,enable_events=True,auto_size_text=True,default_value='-')],
         [sg.Checkbox('Otro',background_color=("white"),text_color=('Black'),enable_events=True,key=('check'))],
         [sg.Text('Complete el género',background_color=("white"),text_color=('Black'))],[sg.Input(size=(8,5),disabled=True,key=('completar'))],
         # Guardar los datos
-        [sg.Button('Guardar Datos',button_color=("green"),key='guardar',pad=(0,30)),sg.Button('Salir',key='salir',button_color=('#F53A3A'),pad=(20,0))]
+        [sg.Button('Guardar Datos',key='guardar',pad=(0,30)),sg.Button('Salir',key='salir',pad=(20,0))]
 
     ]
 
     columna2 = [
-        [sg.Image(source=avatar,key="avatar",pad=((90,10)),subsample=(2),s=(300,300),background_color='white')],
-        [sg.Button('Subir Foto',button_color=("#63ABE7"),key="foto",pad=(150,0))]
+        [sg.Image(source=avatar,key="avatar",pad=((90,10)),subsample=(2),s=(300,300))],
+        [sg.Button('Subir Foto',key="foto",pad=(150,0))]
     ]
     layout = [
-                [   sg.Column(columna1,fondo),
-                    sg.VSeparator(color='white',pad=(100,0)),
-                    sg.Column(columna2,fondo)
+                [   sg.Column(columna1),
+                    sg.VSeparator(pad=(100,0)),
+                    sg.Column(columna2)
                 ]
             ]
-    window = sg.Window('Registro',layout,background_color='white',scaling=3,margins=(100,100),resizable=True)
+    window = sg.Window('Registro',layout,scaling=3,margins=(100,100),resizable=True)
     visible = True
     errores = False
     dicc = {}
@@ -81,14 +81,14 @@ def _register ():
                     sg.popup_ok("Ingrese un valor numérico",title='Edad',background_color=("white"),text_color=('Black'),button_color=('green'))
             if visible:
                 if value['lista'] == '-':
-                    sg.popup_ok("Complete el campo: Genero",title='Error',background_color=("white"),text_color=('Black'),button_color=('green'))
+                    sg.popup_ok("Complete el campo: Genero",title='Error')
                     errores = True
                 else:
                     #print('entro aca')
                     genero = value['lista']
             else:
                 if value['completar'] == '':
-                    sg.popup_ok("Complete el campo: Genero2",title='Error',background_color=("white"),text_color=('Black'),button_color=('green'))
+                    sg.popup_ok("Complete el campo: Genero2",title='Error')
                     errores = True
                 elif(not visible):
                     genero = value['completar']

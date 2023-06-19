@@ -8,9 +8,17 @@ import pantallas.ayuda as ayuda
 import pantallas.etiquetar as etiquetar
 import csv
 
-def crear_ventana_principal(perfil):
+# PEP 8 VER. Idem ayuda, configuración, etiquetar, unlpimage, memes, registro, inicio, modificar y collage.
+# SALIR O CERRAR SESIÓN? VER
+# Popup en configuración?
 
-    image_configuracion = '././imagenes/boton.png'
+# ------- Definicion del layout --------
+
+def crear_ventana_principal(perfil):
+    """ Esta función crea el layout de la ventana del menu principal, recibiendo como parametro el perfil elegido
+        al iniciar sesión o registrarse. Del mismo se mostrará la imagen seleccionada y su nick."""
+    
+    image_configuracion = '././imagenes/boton.png'   # Agregar como una constante en otro archivo ------------------------------------------------------
     image_perfil = perfil['foto']
 
     menu_def = [
@@ -27,18 +35,27 @@ def crear_ventana_principal(perfil):
     
     images_col = [sg.Button('', image_filename=image_configuracion, image_size=(50, 50), image_subsample=2, key="-PRINCIPAL-CONFIGURACION-")],
 
-    perfil_col= [sg.Button('', image_filename=image_perfil, image_size=(50, 50), image_subsample=5, key="-PRINCIPAL-EDITAR-")],
+    perfil_col= [sg.Button('', image_filename=image_perfil, image_size=(50, 50), image_subsample=5, key="-PRINCIPAL-EDITAR-")], [sg.Text(perfil['nick'])], 
     
 
-    return [[sg.Column(perfil_col, element_justification='l', vertical_alignment='t'),sg.Push(), sg.Column(images_col, element_justification='c', vertical_alignment="c")], [sg.Column(left_col, justification="center", element_justification='c', vertical_alignment="r", pad=((0,250)))]]
+    return [[sg.Column(perfil_col, element_justification='l', vertical_alignment='c'),sg.Push(), sg.Column(images_col, element_justification='c', vertical_alignment="t")], [sg.Column(left_col, justification="center", element_justification='c', vertical_alignment="r", pad=((0,250)))]]
 
-   
+
+
+
+
+
+# ------- Main -------- 
 
 def main(perfil):
+    """ En esta función se ejecuta el menu principal de la aplicación, que durante un loop infinito va leyendo los
+        eventos provocados al interactuar con el mismo."""
+    
     menu = sg.Window("Menu principal", crear_ventana_principal(perfil), finalize=True, resizable=True, metadata={"configuracion_csv": None})
-    menu.set_min_size((1024,768))
+    menu.set_min_size((1024,768))    # PONER COMO UNA CONSTANTE ------------------------------------------------------------------------------------------------
+    # se le asigna a la variable menu el layout, y se le establece el tamaño mínimo.
 
-    # abro archivo
+    # se abre el archivo de configuración en modo lectura, sino existe, se crea vacío y se vuelve a leer.
     try:
         with open(os.path.join('archivos','archivo_configuracion.csv'), 'r') as archivo_csv:
             lector_csv = csv.reader(archivo_csv)
@@ -57,20 +74,15 @@ def main(perfil):
         sg.Popup('Ocurrió un error inesperado.')
 
 
-    
-
     menu.metadata["configuracion_csv"] = contenido_csv
-
+    # se le asigna a la metadata del menu la configuración contenida en el archivo csv. 
 
     # Loop infinito de eventos.
 
     while True:
         current_window, event, values = sg.read_all_windows()
         
-        if event == sg.WIN_CLOSED:
-            current_window.close()
-            break
-        elif event == "-PRINCIPAL-SALIR-":
+        if (event == "-PRINCIPAL-SALIR-") or event == sg.WIN_CLOSED:
             current_window.close()
             break
         elif event == "Acerca de...":
@@ -78,23 +90,27 @@ def main(perfil):
         elif event == "-PRINCIPAL-ETIQUETAR-":
             current_window.hide()
             etiquetar.main(perfil, config=menu.metadata["configuracion_csv"])
+            # se envía el perfil actual junto con la configuración actual seleccionada por el usuario.
             current_window.un_hide()
         elif event == "-PRINCIPAL-MEME-":
             current_window.hide()
-            memes.main("Generar Meme")
+            memes.main()
             current_window.un_hide()
         elif event == "-PRINCIPAL-COLLAGE-":
             current_window.hide()
-            collage.main("Generar Collage")
+            collage.main()
             current_window.un_hide()
-        elif event == "-PRINCIPAL-CONFIGURACION-":        
+        elif event == "-PRINCIPAL-CONFIGURACION-":   
             current_window.hide() 
             conf = configuracion.main(perfil, config=menu.metadata["configuracion_csv"])
             if conf is not None:
                 menu.metadata["configuracion_csv"] = conf
             current_window.un_hide()  
-            # CONSULTAR COMO CERRAR LA VENTANA CONFIGURACIÓN Y NO LA VENTANA MENU
+            # Se pasa como parametro la configuración actual, y si se produce algún cambio se modifica la metadata
+            # de la ventana menu.
         elif event == "-PRINCIPAL-EDITAR-":
             current_window.hide()
             perfil = modificar.main(perfil)
+            current_window['-PRINCIPAL-EDITAR-'].update(image_filename = perfil['foto'], image_size=(50, 50), image_subsample=5)                          
+            # si se produce algún cambio se cambia el perfil actual.
             current_window.un_hide()
