@@ -32,10 +32,6 @@ def crear_ventana_etiquetar(nombres_imagenes):
     return sg.Window('Etiquetar Imagen', layout, return_keyboard_events=True, use_default_focus=False, size=(1024,768), finalize=True)
 
 
-
-
-# Usa el PIL para leer la info de una imagen
- 
 def get_img_data(f):
         """Devuelve los datos de la imagen"""
         img = Image.open(f)
@@ -44,9 +40,6 @@ def get_img_data(f):
         tamano_bytes = os.path.getsize(os.path.join(f))
         return [f,'',img_size, tamano_bytes, img_format,[],'','']
         
-        
-# Abre solo una imagen, le ajusta el tamaño y la retorna
-
 def get_image(f, maxsize=(450,350)):
      """Genera una imagen usando Pil"""
      img = Image.open(f)
@@ -220,7 +213,6 @@ def main(perfil, config):
                                     sg.popup('Esta imagen ya fue guardada con la misma información')
                             else:
                                 sg.popup('Faltan campos por completar')
-                    # Agregar Popup -------------------------------------------------------------------
                     elif (event == '-SECUNDARIA-VOLVER-') or (event == sg.WIN_CLOSED):
                         try:
                             # Si la foto es nueva y se realizo un cambio sin guardar

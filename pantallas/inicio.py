@@ -34,7 +34,7 @@ def crear_ventana_inicio(lista):
     return sg.Window('Inicio', layout = layout, finalize = True, relative_location=(-250, -100))
 
 def agregar_a_la_lista(lista, i, perfil):
-    #lista[i]["foto"] = paths.convertir_guardado_para_usar(perfil["foto"], paths.DIR_PROYECTO)
+    """ Recibe la lista de perfiles y guarda al final el nuevo perfil. Con esta lista se actualiza el layout."""
     lista[i]["nick"] = perfil["nick"]
     nombre = 'foto' + perfil['nick'] + '.png'
     guardar_foto = os.path.join(paths.DIR_MINIFOTO, nombre)
@@ -53,8 +53,7 @@ def recorrer_json(datos_json, lista):
 
 def actualizar_perfiles(login, lista, act):
     """ Esta función actualiza el layout de la pantalla de inicio, mostrando otras imagenes y nombres 
-        de usuario
-      """
+        de usuario """
     pagina = "Pagina: " + str(int((act/4)+1)) + " /5"
     login['0'].update(image_filename = lista[act]["foto"])
     login['1'].update(image_filename = lista[act+1]["foto"])

@@ -20,6 +20,7 @@ def crear_ventana_configuracion(config_a_mostrar):
 
 
 def configuracion_en_pantalla(config_a_mostrar):
+    """ Esta función devuelve las direcciones absolutas de los distintos directorios para mostrarlas en pantalla """
     for i, con in enumerate(config_a_mostrar):
         if (con != ''):
             config_a_mostrar[i] = paths.convertir_guardado_para_usar(con, paths.DIR_PROYECTO)

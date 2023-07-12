@@ -61,7 +61,7 @@ def cargar_json_nuevo(user):
     return True
                 
 def cargar_json(user):
-    ''' Esta funcion modificar el perfil del usuario dentro del json. Genera los logs correspondientes. '''
+    """ Esta funcion modificar el perfil del usuario dentro del json. Genera los logs correspondientes. """
     datos = funciones.leer_archivo_json(paths.DIR_USER)        
     for i, line in enumerate(datos):                                  
         if(line['nick'] == user['nick']):
@@ -199,12 +199,12 @@ def register (ya_registrado, perfil = None):
 
 
 def registrarse():
-    ''' Esta funcion permite registrar un nuevo usuario en la aplicacion'''
+    """ Esta funcion permite registrar un nuevo usuario en la aplicacion"""
     dic = register(False)
     return dic
 
 def modificar(perfil):
-    ''' Esta funcion permite modificar un usuario en la aplicacion. Recibe el perfil a modificar'''
+    """ Esta funcion permite modificar un usuario en la aplicacion. Recibe el perfil a modificar"""
     dic = register(True, perfil)
     return dic
 

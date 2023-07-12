@@ -9,9 +9,6 @@ import pantallas.etiquetar as etiquetar
 import funciones.paths as paths
 import funciones.funciones as funciones
 
-# PEP 8 VER. Idem ayuda, configuración, etiquetar, unlpimage, memes, registro, inicio, modificar y collage.
-# SALIR O CERRAR SESIÓN? VER
-# Popup en configuración?
 
 # ------- Definicion del layout --------
 
@@ -57,7 +54,6 @@ def main(perfil):
     
     menu = crear_ventana_principal(perfil)
     menu.set_min_size((800,600))
-    # PONER COMO UNA CONSTANTE ------------------------------------------------------------------------------------------------
     # se le asigna a la variable menu el layout, y se le establece el tamaño mínimo.
 
     # se abre el archivo de configuración en modo lectura, sino existe, se crea vacío y se vuelve a leer.
@@ -97,7 +93,7 @@ def main(perfil):
             current_window.un_hide()
         elif event == "-PRINCIPAL-COLLAGE-":
             current_window.hide()
-            collage.main("generar collage",perfil['nick'], config= menu.metadata["configuracion_csv"])
+            collage.main("Generar Collage",perfil['nick'], config= menu.metadata["configuracion_csv"])
             current_window.un_hide()
         elif event == "-PRINCIPAL-CONFIGURACION-":   
             current_window.hide() 
