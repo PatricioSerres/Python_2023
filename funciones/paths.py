@@ -25,3 +25,8 @@ DIR_MINIFOTO = convertir_guardado_para_usar('imagenes/mini_fotos', DIR_PROYECTO)
 DIR_USER = convertir_guardado_para_usar("archivos/user.json", DIR_PROYECTO)
 DIR_TEMPLATE_MEME = convertir_guardado_para_usar("archivos/template_meme.json", DIR_PROYECTO)
 DIR_FUENTES = convertir_guardado_para_usar('fuentes', DIR_PROYECTO)
+DIR_TEMPLATE_COLLAGE_1 = convertir_guardado_para_usar('imagenes/opciones/opcion1.png', DIR_PROYECTO)
+DIR_TEMPLATE_COLLAGE_2 = convertir_guardado_para_usar('imagenes/opciones/opcion2.png', DIR_PROYECTO)
+DIR_TEMPLATE_COLLAGE_3 = convertir_guardado_para_usar('imagenes/opciones/opcion3.png', DIR_PROYECTO)
+DIR_TEMPLATE_COLLAGE_4 = convertir_guardado_para_usar('imagenes/opciones/opcion4.png', DIR_PROYECTO)
+
