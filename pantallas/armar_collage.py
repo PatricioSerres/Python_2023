@@ -88,40 +88,54 @@ def iniciar_collage (perfil, directorio_collage, template, commons, lugares):
     # Nombre de las imagenes
     imagenes = ["ej" for i in range(cant)]
     titulo = ''
+    x = 0
+    y = 0
     while True:        
         window, event, values = sg.read_all_windows()   
         # Listas para almacenar las direcciones, las copias y las originales
         if event == 'im1':
             # Si se quiere elegir la primera imagen, se envían los parametros necesarios a la función colocar imagenes
             collage = funciones.colocar_imagenes(imagenes,collage,rutas,tags,values['im1'],commons[0],lugares[0],posicion=0)
-            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,max_x,max_y,imagen_a_mostrar,titulo)
+            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,imagen_a_mostrar,titulo)
             window['muestra'].update(data = imagen_a_mostrar)     
         elif event == 'im2':
             # Se repite la misma logica que para el anterior if
             collage = funciones.colocar_imagenes(imagenes,collage,rutas,tags,values['im2'],commons[1],lugares[1],posicion=1)
-            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,max_x,max_y,imagen_a_mostrar,titulo)
+            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,imagen_a_mostrar,titulo)
             window['muestra'].update(data = imagen_a_mostrar)
         elif event == 'im3':
             # Se repite la misma logica que para el anterior if
             collage = funciones.colocar_imagenes(imagenes,collage,rutas,tags,values['im3'],commons[2],lugares[2],posicion=2)
-            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,max_x,max_y,imagen_a_mostrar,titulo)
+            imagen_a_mostrar = funciones.actualizar_imagen(collage,x,y,imagen_a_mostrar,titulo)
             window['muestra'].update(data = imagen_a_mostrar)
-        elif event == 'agregar_texto':
-            # Crea una copia de la imagen sin texto para agregarle uno y luego mostrarlo en pantalla
-            imagen_con_texto = collage.copy()
-            draw = PIL.ImageDraw.Draw(imagen_con_texto)
+        elif event == 'agregar_texto': 
             try:
                 # Me fijo si los valores ingresados son numéricos, sino mostrara una ventana de error
-                x = int(values['x'])
-                y = int(values['y'])
+                x_aux = int(values['x'])
+            except:
+                sg.popup_ok("Por favor, ingrese un valor numérico",title='Error',background_color=("white"),text_color=('Black'),button_color=('green'))
+            try:
+                y_aux = int(values['y'])
             except:
                 sg.popup_ok("Por favor, ingrese un valor numérico",title='Error',background_color=("white"),text_color=('Black'),button_color=('green'))
             else:
-                titulo = values['completar']
-                titulo = funciones.actualizar(draw, titulo, x, y, max_x,max_y)      
-                imagen_a_mostrar = imagen_con_texto.copy()
-                imagen_a_mostrar = PIL.ImageTk.PhotoImage(imagen_a_mostrar)
-                window['muestra'].update(data = imagen_a_mostrar)              
+                if (-1< x_aux < max_x) and (-1 < y_aux < max_y):
+                    imagen_con_texto = collage.copy()
+                    draw = PIL.ImageDraw.Draw(imagen_con_texto)
+                    titulo = values['completar']
+                    x = x_aux
+                    y = y_aux
+                    draw.text((x,y),titulo)     
+                    imagen_a_mostrar = imagen_con_texto.copy()
+                    imagen_a_mostrar = PIL.ImageTk.PhotoImage(imagen_a_mostrar)
+                    window['muestra'].update(data = imagen_a_mostrar) 
+                 # Si los valores estaban fuera del tamaño se muestra una ventana de advertencia
+                elif(not(-1< x_aux < max_x)):
+                    sg.popup_ok("Por favor, ingrese un valor del 0 al {}".format(max_x-1),title='Error X',background_color=("white"),text_color=('Black'),button_color=('green'))
+                else:
+                    sg.popup_ok("Por favor, ingrese un valor del 0 y {}".format(max_y-1),title='Error Y',background_color=("white"),text_color=('Black'),button_color=('green'))
+                # Crea una copia de la imagen sin texto para agregarle uno y luego mostrarlo en pantalla      
+                            
         elif event == 'Guardar':
             # Si se guarda se hara un ultimo guardado de los cambios y 
             # se llamara a la funcion para hacer los logs

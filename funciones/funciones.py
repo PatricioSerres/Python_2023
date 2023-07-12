@@ -102,27 +102,12 @@ def colocar_imagenes (imagenes,collage,rutas,tags,nombre_imagen,common,lugar_ima
     collage.paste(aux,lugar_imagen)
     return collage
 
-def actualizar(draw,texto,x,y,max_x,max_y):
-    """ Esta función escribe el título sobre la imagen si los valores de x e y son válidos"""
-    # Si los valores estan dentro de el tamaño del collage
-    if (-1< x < max_x) and (-1 < y < max_y):            
-        # Escribo lo que se haya ingresado en el input
-        draw.text((x,y),texto)
-        return texto
-    # Si los valores estaban fuera del tamaño se muestra una ventana de advertencia
-    elif(not(-1< x < max_x)):
-        sg.popup_ok("Por favor, ingrese un valor del 0 al {}".format(max_x-1),title='Error X',background_color=("white"),text_color=('Black'),button_color=('green'))
-        return ''
-    else:
-        sg.popup_ok("Por favor, ingrese un valor del 0 y {}".format(max_y-1),title='Error Y',background_color=("white"),text_color=('Black'),button_color=('green'))
-        return ''
-    
-def actualizar_imagen(collage,x,y,max_x,max_y,imagen_a_mostrar,titulo):
+def actualizar_imagen(collage,x,y,imagen_a_mostrar,titulo):
     """Esta función crea un Tk de imagen para mostrar en pantalla y verifica si tiene titulo"""
     if (titulo != ''):
         imagen_con_texto = collage.copy()
         draw = PIL.ImageDraw.Draw(imagen_con_texto)
-        titulo = actualizar(draw, titulo, x, y, max_x,max_y)   
+        draw.text((x,y),titulo)  
         imagen_a_mostrar = imagen_con_texto.copy()
     else:
         imagen_a_mostrar = collage.copy()
